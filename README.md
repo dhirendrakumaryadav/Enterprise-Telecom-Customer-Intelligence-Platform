@@ -1,89 +1,68 @@
-# Enterprise-Telecom-Customer-Intelligence-Platform
-Designed an enterprise Lakehouse platform on Databricks using Medallion Architecture, integrating telecom customer, billing, and network event data through batch and streaming ingestion.
-                        Azure SQL Database
-                               │
-                        (Batch Customer Data)
-                               │
-                               ▼
-                   Azure Data Factory (Optional)
-                               │
-                               ▼
-                    Azure Data Lake Storage Gen2
-                               │
-                               ▼
-                  Databricks Auto Loader / Ingestion
-                               │
-                               ▼
-                         Bronze Layer (Delta)
-                               │
-                Spark Declarative Pipelines
-                               │
-                               ▼
-                         Silver Layer
-          Cleaning • Validation • CDC • Deduplication
-                               │
-                               ▼
-                          Gold Layer
-                 Star Schema + Business KPIs
-                    /                     \
-                   /                       \
-     Databricks AI/BI Dashboard      Mosaic AI
-                                             │
-                                     Vector Search
-                                             │
-                                   AI Customer Assistant
+# Enterprise Telecom Customer Intelligence Platform
 
+An end-to-end data engineering and AI portfolio project for telecom customer, billing, support, and network analytics.
 
-->Technologies We'll Actually Use
-Azure
-Azure Data Lake Storage Gen2
-Azure SQL Database
-Azure Data Factory (later)
-Azure Portal
-->Databricks
-Unity Catalog
-Delta Lake
-Spark Declarative Pipelines
-Auto Loader
-Lakehouse Monitoring
-AI/BI Dashboards
-Mosaic AI
-Vector Search
-->Data Engineering
-PySpark
-SQL
-Medallion Architecture
-CDC
-Star Schema
+The platform will use Azure Databricks and a Medallion architecture to turn raw source data into governed, analytics-ready datasets and an AI-assisted support experience.
 
-Step 1
-Databricks
+## Status
 
-↓
+🚧 **Sprint 1 — Project initialization**
 
-Step 2
-Delta Lake
+## Target architecture
 
-↓
+```text
+Source CSVs / CDC / network events
+                |
+                v
+        ADLS Gen2 landing zone
+                |
+                v
+       Auto Loader -> Bronze Delta
+                |
+                v
+ Spark Declarative Pipelines -> Silver
+                |
+                v
+      Gold star schema and KPI tables
+          |                      |
+          v                      v
+AI/BI dashboards     Mosaic AI + Vector Search
+```
 
-Step 3
-Spark Declarative Pipelines
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the detailed architecture.
 
-↓
+## Planned technology stack
 
-Step 4
-Unity Catalog
+- Azure Data Lake Storage Gen2 and Azure Databricks
+- PySpark, SQL, Delta Lake, and Spark Declarative Pipelines
+- Unity Catalog, Auto Loader, and Lakehouse Monitoring
+- Mosaic AI, Vector Search, and Databricks AI/BI Dashboards
+- Python, Git, and GitHub
 
-↓
+## Repository layout
 
-Step 5
-AI
+```text
+├── architecture/   # diagrams and architecture assets
+├── configs/        # non-secret local and deployment configuration
+├── datasets/raw/   # generated source-data landing files (not committed)
+├── docs/           # technical and operational documentation
+├── notebooks/      # exploration and Databricks notebooks
+├── pipelines/      # Spark Declarative Pipeline definitions
+├── src/            # reusable Python modules
+│   ├── ai/
+│   ├── common/
+│   ├── generators/
+│   ├── ingestion/
+│   └── transformations/
+└── tests/          # automated tests
+```
 
-↓
+## Local setup
 
-Step 6
-ADF Orchestration
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
-
-
---->
+No cloud credentials are committed to this repository. Copy `.env.example` to `.env` when a later sprint needs local credentials.

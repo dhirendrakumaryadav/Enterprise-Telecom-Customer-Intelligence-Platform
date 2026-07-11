@@ -1,0 +1,18 @@
+project:
+  name: enterprise-telecom-customer-intelligence-platform
+  environment: local
+
+data:
+  raw_data_root: datasets/raw
+  entities:
+    - customers
+    - plans
+    - billing
+    - recharge
+    - support
+    - network
+
+azure:
+  storage_account_env: AZURE_STORAGE_ACCOUNT
+  landing_container: landing
+

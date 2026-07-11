@@ -1,0 +1,6 @@
+# Sprint 1: synthetic data generation and configuration
+faker>=25.0,<30.0
+numpy>=1.26,<3.0
+pandas>=2.2,<3.0
+PyYAML>=6.0,<7.0
+

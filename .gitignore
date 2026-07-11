@@ -1,0 +1,34 @@
+# Python environments and build artifacts
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Editor and notebook state
+.vscode/
+.idea/
+.ipynb_checkpoints/
+
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Generated datasets and runtime output
+datasets/raw/**/*.csv
+datasets/raw/**/*.json
+datasets/raw/**/*.parquet
+data/
+logs/
+checkpoints/
+
+# Databricks local state
+.databricks/
+
