@@ -1,13 +1,36 @@
-"""Shared data definitions and CSV helpers for telecom source generators."""
+"""Shared data definitions and utilities for telecom source generators."""
 
 from __future__ import annotations
 
 import csv
+import logging
 import random
+from collections.abc import Iterable, Mapping, Sequence
 from datetime import date, datetime
 from pathlib import Path
-from typing import Iterable, Mapping
 
+logger = logging.getLogger(__name__)
+
+# ============================================================
+# Global Configuration
+# ============================================================
+
+DEFAULT_SEED = 42
+
+REFERENCE_DATE = date(2026, 1, 1)
+
+REFERENCE_DATETIME = datetime(
+    2026,
+    1,
+    1,
+    0,
+    0,
+    0,
+)
+
+# ============================================================
+# Telecom Master Data
+# ============================================================
 
 TELECOM_PLANS = (
     {
@@ -92,6 +115,10 @@ TELECOM_PLANS = (
     },
 )
 
+# ============================================================
+# Geography
+# ============================================================
+
 CITY_STATE = {
     "Bengaluru": "Karnataka",
     "Chennai": "Tamil Nadu",
@@ -105,28 +132,102 @@ CITY_STATE = {
     "Lucknow": "Uttar Pradesh",
 }
 
+STATE_TO_CIRCLE = {
+    "Karnataka": "Karnataka Circle",
+    "Tamil Nadu": "Tamil Nadu Circle",
+    "Delhi": "Delhi Circle",
+    "Telangana": "Andhra & Telangana Circle",
+    "West Bengal": "West Bengal Circle",
+    "Maharashtra": "Maharashtra Circle",
+    "Rajasthan": "Rajasthan Circle",
+    "Gujarat": "Gujarat Circle",
+    "Uttar Pradesh": "UP Circle",
+}
 
-def write_csv(output_path: str | Path, fieldnames: list[str], rows: Iterable[Mapping[str, object]]) -> Path:
-    """Write dictionaries to a UTF-8 CSV file and return its resolved path."""
+# ============================================================
+# CSV Utilities
+# ============================================================
+
+def write_csv(
+    output_path: str | Path,
+    fieldnames: Sequence[str],
+    rows: Iterable[Mapping[str, object]],
+) -> Path:
+    """
+    Write rows to CSV and return the output path.
+    """
+
     path = Path(output_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    with path.open(
+        "w",
+        newline="",
+        encoding="utf-8",
+    ) as file:
+
+        writer = csv.DictWriter(
+            file,
+            fieldnames=fieldnames,
+        )
+
         writer.writeheader()
         writer.writerows(rows)
+
+    logger.info(
+        "CSV written to %s",
+        path,
+    )
+
     return path
 
 
-def read_csv(input_path: str | Path) -> list[dict[str, str]]:
-    with Path(input_path).open(newline="", encoding="utf-8") as file:
+def read_csv(
+    input_path: str | Path,
+) -> list[dict[str, str]]:
+    """
+    Read CSV into memory.
+    """
+
+    with Path(input_path).open(
+        newline="",
+        encoding="utf-8",
+    ) as file:
+
         return list(csv.DictReader(file))
 
 
-def month_start(year: int, month: int) -> date:
-    return date(year, month, 1)
+# ============================================================
+# Date Utilities
+# ============================================================
+
+def month_start(
+    year: int,
+    month: int,
+) -> date:
+    """
+    Return first day of month.
+    """
+
+    return date(
+        year,
+        month,
+        1,
+    )
 
 
-def random_datetime(rng: random.Random, start: datetime, end: datetime) -> datetime:
-    """Return a reproducible timestamp between two timestamps."""
+def random_datetime(
+    rng: random.Random,
+    start: datetime,
+    end: datetime,
+) -> datetime:
+    """
+    Return deterministic random timestamp
+    between start and end.
+    """
+
     return start + (end - start) * rng.random()
-

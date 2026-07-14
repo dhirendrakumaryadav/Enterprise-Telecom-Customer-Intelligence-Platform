@@ -1,11 +1,13 @@
-"""Generate the stable telecom plan catalogue."""
+"""Generate the telecom plan catalogue used across the platform."""
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from .common import TELECOM_PLANS, write_csv
 
+logger = logging.getLogger(__name__)
 
 PLAN_FIELDS = [
     "plan_id",
@@ -20,6 +22,23 @@ PLAN_FIELDS = [
 
 
 def generate_plans(output_path: str | Path) -> Path:
-    """Write the portfolio's eight-plan catalogue to CSV."""
-    return write_csv(output_path, PLAN_FIELDS, TELECOM_PLANS)
+    """
+    Generate the telecom plan master dataset.
 
+    This dataset acts as a reference/master table for
+    customer subscriptions, billing, and downstream analytics.
+    """
+
+    output_file = write_csv(
+        output_path,
+        PLAN_FIELDS,
+        TELECOM_PLANS,
+    )
+
+    logger.info(
+        "Generated %s telecom plans at %s",
+        len(TELECOM_PLANS),
+        output_file,
+    )
+
+    return output_file
