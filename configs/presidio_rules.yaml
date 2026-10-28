@@ -1,0 +1,41 @@
+# Custom Presidio Recognizers for Telecom Domain
+custom_recognizers:
+  - name: "IndianMobileRecognizer"
+    supported_language: "en"
+    patterns:
+      - name: "in_mobile_standard"
+        regex: "(?:\\+91[\\-\\s]?)?[6789]\\d{9}\\b"
+        score: 0.85
+    supported_entity: "PHONE_NUMBER"
+
+  - name: "TelecomImsiRecognizer"
+    supported_language: "en"
+    patterns:
+      - name: "imsi_15_digit"
+        regex: "\\b404\\d{12}\\b|\\b405\\d{12}\\b" # Indian MCC (404/405) + MNC + MSIN
+        score: 0.90
+    supported_entity: "TELECOM_IMSI"
+
+  - name: "TelecomAccountIdRecognizer"
+    supported_language: "en"
+    patterns:
+      - name: "account_no_pattern"
+        regex: "\\b(?:ACC|ACCT|CUST)-[A-Z0-9]{6,12}\\b"
+        score: 0.90
+    supported_entity: "TELECOM_ACCOUNT_ID"
+
+entities_to_mask:
+  - "PERSON"
+  - "PHONE_NUMBER"
+  - "EMAIL_ADDRESS"
+  - "TELECOM_IMSI"
+  - "TELECOM_ACCOUNT_ID"
+  - "CREDIT_CARD"
+  - "IP_ADDRESS"
+
+anonymization_strategy:
+  default: "replace"
+  masking_char: "*"
+  chars_to_mask: 4
+  from_end: true
+
